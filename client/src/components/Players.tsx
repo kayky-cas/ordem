@@ -1,12 +1,12 @@
 import { CiLogout } from "react-icons/ci";
 import { ArrowLeftIcon } from "@chakra-ui/icons";
-import { Avatar, Box, Button, Grid, IconButton, Stack } from "@chakra-ui/react";
+import { Box, Button, Grid, IconButton, Stack } from "@chakra-ui/react";
+import { PlayerAvatar } from "./PlayersAvatar.tsx";
 
 export type Player = {
     name: string;
     avatar?: string;
 };
-
 type Props = {
     players: Array<Player>;
     hidePlayers: () => void;
@@ -47,12 +47,12 @@ export function Players({ players, hidePlayers }: Props) {
                     }}
                 >
                     {players.map((player, idx) => (
-                        <Avatar
+                        <PlayerAvatar
                             mt={idx === 0 ? "10" : "0"}
-                            size={"xl"}
                             key={player.name}
-                            name={player.name}
-                            src={player.avatar}
+                            player={player}
+                            isTurn={idx === 0}
+                            showName={true}
                         />
                     ))}
                 </Stack>
@@ -61,7 +61,6 @@ export function Players({ players, hidePlayers }: Props) {
                     width="full"
                     height="full"
                     p={10}
-                    // bg="ba"
                     boxShadow="0 -20px 20px rgba(0, 0, 0, 0.2)" // Negative value for shadow to grow upwards
                     _hover={{
                         boxShadow: "0 -25px 25px rgba(0, 0, 0, 0.3)", // More pronounced shadow on hover

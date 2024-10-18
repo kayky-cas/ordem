@@ -1,85 +1,67 @@
 // @deno-types="@types/react"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Board } from "./components/Board.tsx";
 import { type Player, Players } from "./components/Players.tsx";
 import { Scenarios } from "./components/Scenarios.tsx";
-import { Grid, GridItem, IconButton } from "@chakra-ui/react";
+import { Avatar, Box, Grid, GridItem, IconButton } from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
+import { PlayerAvatar } from "./components/PlayersAvatar.tsx";
 
 function App() {
     const [playersHidden, setPlayersHidden] = useState(false);
     const [scenariosHidden, setScenariosHidden] = useState(false);
 
-    const players: Array<Player> = [
-        {
-            name: "Player 1",
-        },
-        {
-            name: "Player 2",
-            avatar: "https://avatars.githubusercontent.com/u/20211289?v=4",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-        {
-            name: "Player 3",
-        },
-    ];
+    const players: Array<Player> = new Array(10).fill(null).map((_, i) => {
+        return {
+            name: `Player ${i + 1}`,
+            // avatar: `https://avatars.dicebear.com/api/avataaars/${i}.svg`,
+        };
+    });
 
     return (
         <>
             <IconButton
-                hidden={!playersHidden}
                 pos="absolute"
-                aria-label="Open player tab"
+                aria-label="Close player tab"
                 variant="ghost"
                 colorScheme="whiteAlpha"
                 icon={<ArrowRightIcon />}
                 left={2}
                 top={2}
-                onClick={() => setPlayersHidden(false)}
+                hidden={!playersHidden}
+                onClick={() => {
+                    setPlayersHidden(false);
+                }}
             />
+
+            <Box
+                left="calc(2.5vw + 6px)"
+                top={10}
+                pos="absolute"
+                hidden={!playersHidden}
+            >
+                <PlayerAvatar
+                    mt="0"
+                    player={players[0]}
+                    isTurn={true}
+                    showName={false}
+                    opacity={0.8}
+                />
+            </Box>
             <Grid
-                templateAreas={`
-                  "${playersHidden ? "" : "players"} board"
-                  "${playersHidden ? "" : "players"} scenarios"`}
+                templateAreas={playersHidden
+                    ? `"board"
+             "scenarios"`
+                    : `"players board"
+             "players scenarios"`}
                 h="100vh"
-                gridTemplateColumns={`${playersHidden ? "" : "10%"} 1fr`}
+                gridTemplateColumns={`${playersHidden ? "" : "10vw"} 1fr`}
                 gridTemplateRows="1fr 15%"
             >
                 <GridItem
-                    area={"players"}
+                    gridArea="players"
                     bg="blackAlpha.900"
-                    transition="background 0.2s ease-in-out"
-                    transitionDelay="0.2s"
-                    hidden={playersHidden}
+                    hidden={playersHidden} // TODO: maybe should not even render this?
                 >
                     <Players
                         players={players}
